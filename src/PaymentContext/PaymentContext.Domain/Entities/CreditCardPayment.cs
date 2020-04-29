@@ -1,9 +1,7 @@
-﻿using PaymentContext.Domain.Entities;
+﻿using PaymentContext.Domain.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PaymentContext.Tests.Entities
+namespace PaymentContext.Domain.Entities
 {
     public class CreditCardPayment : Payment
     {
@@ -25,9 +23,9 @@ namespace PaymentContext.Tests.Entities
                                  decimal total,
                                  decimal taotalPaid,
                                  string payer,
-                                 string address,
-                                 string document,
-                                 string email) : base(paidDate, expireDate, total, taotalPaid, payer, address, document, email)
+                                 Address address,
+                                 Document document,
+                                 Email email) : base(paidDate, expireDate, total, taotalPaid, payer, address, document, email)
         {
             CardHolderName = cardHolderName;
             CardNumber = cardNumber;

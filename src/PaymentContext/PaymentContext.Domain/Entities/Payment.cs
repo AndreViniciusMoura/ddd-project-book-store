@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using PaymentContext.Domain.ValueObjects;
+using System;
 
 namespace PaymentContext.Domain.Entities
 {
@@ -20,17 +19,17 @@ namespace PaymentContext.Domain.Entities
 
         public string Payer { get; private set; }
 
-        public string Address { get; private set; }
+        public Address Address { get; private set; }
 
-        public string Document { get; private set; }
+        public Document Document { get; private set; }
 
-        public string Email { get; private set; }
+        public Email Email { get; private set; }
 
         #endregion
 
         #region Constructor
 
-        protected Payment(DateTime paidDate, DateTime expireDate, decimal total, decimal taotalPaid, string payer, string address, string document, string email)
+        protected Payment(DateTime paidDate, DateTime expireDate, decimal total, decimal taotalPaid, string payer, Address address, Document document, Email email)
         {
             Number = Guid.NewGuid().ToString().Replace("-","").Substring(0, 10).ToUpper();
             PaidDate = paidDate;

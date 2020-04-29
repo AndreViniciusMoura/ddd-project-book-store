@@ -1,9 +1,7 @@
-﻿using PaymentContext.Domain.Entities;
+﻿using PaymentContext.Domain.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PaymentContext.Tests.Entities
+namespace PaymentContext.Domain.Entities
 {
     public class PayPalPayment : Payment
     {
@@ -19,10 +17,10 @@ namespace PaymentContext.Tests.Entities
                              DateTime expireDate, 
                              decimal total, 
                              decimal taotalPaid, 
-                             string payer, 
-                             string address, 
-                             string document, 
-                             string email) : base(paidDate, expireDate, total, taotalPaid, payer, address, document, email)
+                             string payer,
+                             Address address,
+                             Document document,
+                             Email email) : base(paidDate, expireDate, total, taotalPaid, payer, address, document, email)
         {
             TransactionCode = transactionCode;
         }
