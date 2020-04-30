@@ -21,6 +21,9 @@ namespace PaymentContext.Domain.ValueObjects
         {
             FirstName = firstName;
             LastName = lastName;
+
+            if (string.IsNullOrEmpty(FirstName))
+                AddNotification("Name.FirstName", "Nome inválido");
         }
 
         #endregion
