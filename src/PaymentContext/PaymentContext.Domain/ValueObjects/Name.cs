@@ -6,8 +6,8 @@ using System.Text;
 
 namespace PaymentContext.Domain.ValueObjects
 {
-    public class Name: ValueObject
-    {        
+    public class Name : ValueObject
+    {
         #region Proprieties
 
         public string FirstName { get; private set; }
@@ -34,6 +34,11 @@ namespace PaymentContext.Domain.ValueObjects
         #endregion
 
         #region Behaviors
+
+        public override string ToString()
+        {
+            return $"{FirstName} {LastName}";
+        }
 
         #endregion
     }

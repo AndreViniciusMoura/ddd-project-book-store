@@ -1,12 +1,11 @@
-﻿using PaymentContext.Domain.Enums;
-using PaymentContext.Domain.ValueObjects;
+﻿using Flunt.Notifications;
+using PaymentContext.Domain.Enums;
+using PaymentContext.Shared.Commands;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PaymentContext.Domain.Commands
+namespace PaymentContext.Domain.Commands.Payment
 {
-    public class CreateCreditCardSubscriptionCommand
+    public abstract class CreatePaymentSubscription : Notifiable, ICommand
     {
         #region Proprieties
 
@@ -17,12 +16,6 @@ namespace PaymentContext.Domain.Commands
         public string Document { get; set; }
 
         public string Email { get; set; }
-
-        public string CardHolderName { get; private set; }
-
-        public string CardNumber { get; private set; }
-
-        public string LastTransactionNumber { get; private set; }
 
         public string PaymentNumber { get; set; }
 
@@ -38,7 +31,7 @@ namespace PaymentContext.Domain.Commands
 
         public string PayerEmail { get; set; }
 
-        public Document PayerDocument { get; set; }
+        public string PayerDocument { get; set; }
 
         public EDocumentType PayerDocumentType { get; set; }
 
@@ -63,6 +56,8 @@ namespace PaymentContext.Domain.Commands
         #endregion
 
         #region Methods
+
+        public abstract void Validate();
 
         #endregion
     }

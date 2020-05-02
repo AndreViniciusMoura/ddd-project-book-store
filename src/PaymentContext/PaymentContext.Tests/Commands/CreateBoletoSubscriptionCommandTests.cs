@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PaymentContext.Domain.Commands;
+using PaymentContext.Domain.Commands.Payment;
 using System;
 using System.Collections.Generic;
 using System.Text;
