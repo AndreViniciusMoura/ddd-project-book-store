@@ -38,7 +38,7 @@ namespace PaymentContext.Domain.Handlers
 
         #region Methods
 
-        private Student CrateStudentFactory(CreatePaymentSubscription command)
+        private Student CrateStudentFactory(CreatePaymentSubscription command, Payment payment)
         {
             // Gerar os VOs
             var name = new Name(command.FirstName, command.LastName);
@@ -53,9 +53,11 @@ namespace PaymentContext.Domain.Handlers
                                       command.ZipCode);
 
             // Gerar as Entidades
-            var student = new Student(name, document, email);
+            var student = new Student(name, document, email, address);
             var subscription = new Subscription(DateTime.Now.AddMonths(1));
-            
+
+            //Relacionamentos            
+            subscription.AddPayment(payment);
             student.AddSubscription(subscription);
 
             return student;
@@ -75,9 +77,7 @@ namespace PaymentContext.Domain.Handlers
 
             // Verificar se E-mail já esta cadastrado
             if (_studentRepository.EmailExists(command.Email))
-                AddNotification("email", "Este E-mail já está em uso");
-
-            var student = CrateStudentFactory(command);
+                AddNotification("email", "Este E-mail já está em uso");            
 
             //Criar Pagamento
             var payment = new BoletoPayment(command.BarCode,
@@ -87,21 +87,25 @@ namespace PaymentContext.Domain.Handlers
                                             command.Total,
                                             command.TotalPaid,
                                             command.Payer,
-                                            student.Address,
+                                            new Address(command.Street,
+                                                        command.Number,
+                                                        command.Nighborhood,
+                                                        command.City,
+                                                        command.State,
+                                                        command.Country,
+                                                        command.ZipCode),
                                             new Document(command.PayerDocument, command.PayerDocumentType),
-                                            student.Email);
+                                            new Email(command.Email));
 
-            //Relacionamento
-            var subscription = student.Subscriptions.First();
-            subscription.AddPayment(payment);
+            var student = CrateStudentFactory(command, payment);
 
             //agrupar as Validações
-            AddNotifications(student.Name, 
-                             student.Document, 
-                             student.Email, 
-                             student.Address, 
+            AddNotifications(student.Name,
+                             student.Document,
+                             student.Email,
+                             student.Address,
                              student,
-                             subscription,
+                             student.Subscriptions.First(),
                              payment);
 
             // Salvar as Informações
@@ -117,32 +121,34 @@ namespace PaymentContext.Domain.Handlers
         public ICommandResult Handle(CreatePayPalSubscriptionCommand command)
         {
             //Fail Fast Validations
-            
+
             // Verificar se Documento já esta cadastrado
             if (_studentRepository.DocumentExists(command.Document))
                 AddNotification("Document", "Este CPF já está em uso");
 
             // Verificar se E-mail já esta cadastrado
             if (_studentRepository.EmailExists(command.Email))
-                AddNotification("email", "Este E-mail já está em uso");
-
-            // Gerar os VOs
-            var student = CrateStudentFactory(command);
+                AddNotification("email", "Este E-mail já está em uso");            
 
             //Criar Pagamento
-            var payment = new PayPalPayment(command.TransactionCode,                                            
+            var payment = new PayPalPayment(command.TransactionCode,
                                             command.PaidDate,
                                             command.ExpireDate,
                                             command.Total,
                                             command.TotalPaid,
                                             command.Payer,
-                                            student.Address,
+                                            new Address(command.Street,
+                                                        command.Number,
+                                                        command.Nighborhood,
+                                                        command.City,
+                                                        command.State,
+                                                        command.Country,
+                                                        command.ZipCode),
                                             new Document(command.PayerDocument, command.PayerDocumentType),
-                                            student.Email);
+                                            new Email(command.Email));
 
-            //Relacionamento
-            var subscription = student.Subscriptions.First();
-            subscription.AddPayment(payment);
+            // Gerar os VOs
+            var student = CrateStudentFactory(command, payment);
 
             //Agrupar as Validações
             AddNotifications(student.Name,
@@ -150,8 +156,12 @@ namespace PaymentContext.Domain.Handlers
                              student.Email,
                              student.Address,
                              student,
-                             subscription,
+                             student.Subscriptions.First(),
                              payment);
+
+            // Checar as notificações
+            if (Invalid)
+                return new CommandResult(false, "Não foi possível realizar a sua assinatura");
 
             // Salvar as Informações
             _studentRepository.CreateSubscription(student);

@@ -10,11 +10,11 @@ namespace PaymentContext.Domain.Commands.Payment
     {
         #region Proprieties
 
-        public string CardHolderName { get; private set; }
+        public string CardHolderName { get; set; }
 
-        public string CardNumber { get; private set; }
+        public string CardNumber { get; set; }
 
-        public string LastTransactionNumber { get; private set; }
+        public string LastTransactionNumber { get; set; }
 
         #endregion
 

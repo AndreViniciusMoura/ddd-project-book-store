@@ -30,11 +30,12 @@ namespace PaymentContext.Domain.Entities
 
         #region Constructor
 
-        public Student(Name name, Document document, Email email)
+        public Student(Name name, Document document, Email email, Address address)
         {
             Name = name;
             Document = document;
             Email = email;
+            Address = address;
             _subscriptions = new List<Subscription>();
 
             AddNotifications(name, document, email);

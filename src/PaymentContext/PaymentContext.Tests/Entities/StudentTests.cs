@@ -24,7 +24,7 @@ namespace PaymentContext.Tests.Entities
             _document = new Document("35111507795", EDocumentType.CPF);
             _email = new Email("bruce.wayne@dc.com");
             _address = new Address("Rua 1", "1234", "Bairro Legal", "Gotham", "SP", "BR", "12345");
-            _student = new Student(_name, _document, _email);
+            _student = new Student(_name, _document, _email, _address);
         }
 
         [TestMethod]
